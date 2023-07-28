@@ -11,7 +11,12 @@ const userSchema = new Schema({
         type: String,
         unique: true,
         required: true,
-        match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z\.]{2,6}$/
+        validate: {
+            validator: function(email){
+              return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z\.]{2,6}$/.test(email);
+            },
+            message: props => `${props.value} is not a valid email address`
+        },
     },
     thoughts:  [{
         type: Types.ObjectId,
