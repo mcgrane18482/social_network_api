@@ -7,9 +7,9 @@ module.exports = {
         try{
             const users = await User.find();
             res.json(users);
-        }catch(error){
-            console.log(error.message);
-            res.status(500).json(error.message);
+        }catch(err){
+            console.log(err);
+            res.status(500).json(err);
         }
     },
     // Get one user by Id
@@ -22,9 +22,9 @@ module.exports = {
             }
             res.json(user);
 
-        }catch(error){
-            console.log(error.message);
-            res.status(500).json(error.message);
+        }catch(err){
+            console.log(err);
+            res.status(500).json(err);
         }
     },
     // Create a new user
@@ -33,9 +33,22 @@ module.exports = {
             const newUser = await User.create(req.body);
             res.json(newUser);
 
-        }catch(error){
-            console.log(error.message);
-            return res.status(500).json(error.message);
+        }catch(err){
+            console.log(err);
+            return res.status(500).json(err);
+        }
+    },
+    // Delete a user
+    async deleteUser(req,res){
+        try{
+            const user = await User.findOneAndDelete({_id: req.params.userId});
+            if(!user){
+                res.status(404).json({"message": "cannot delete - no user found with that id"});
+            }
+            res.json({"message": "User deleted successfully"});
+        }catch(err){
+            console.log(err);
+            res.json(err);
         }
     }
 };
