@@ -15,7 +15,7 @@ module.exports = {
     // Get one user by Id
     async getUserbyId(req, res){
         try{
-            const user = await User.findOne({_id: req.params.userId});
+            const user = await User.findOne({_id: req.params.userId}).populate('thoughts').populate('friends');
 
             if(!user){
                 res.staus(404).json({"message": "No student found"});
