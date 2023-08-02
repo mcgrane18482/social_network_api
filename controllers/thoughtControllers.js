@@ -68,8 +68,8 @@ module.exports = {
     // Update a thought
     async updateThought(req,res){
         try{
-            const thought = await Thought.findOneAndUpdate(
-                {_id: req.params.thoughtId}, 
+            const thought = await Thought.findbyIdAndUpdate(
+                req.params.thoughtId, 
                 {$set: req.body},
                 {runValidators:true, new: true});
             if(!thought){
@@ -80,5 +80,37 @@ module.exports = {
             console.log(err);
             res.json(err);
         }
-    }
+    },
+    // Add a reaction
+    async createReaction(req,res){
+        try{
+            const thought = await Thought.findByIdAndUpdate(
+                req.params.thoughtId, 
+                {$addToSet: {reactions: req.body}},
+                {runValidators: true, new: true});
+            if(!thought){
+                res.status(404).json({"message": "No thought found with that id"});
+            }
+            res.json(thought);
+        }catch(err){
+            console.log(err);
+            res.json(err);
+        }
+    },
+    async deleteReaction(req,res){
+        try{
+            const thought = await Thought.findOneAndUpdate(
+                {_id: req.params.thoughtId},
+                {$pull: {reactions: req.body.reactionId}},
+                {new: true}
+                );
+            if(!thought){
+                res.status(404).json({"message": "cannot delete - no thought found with that id"});
+            }
+            res.json({"message": "Thought deleted successfully"});
+        }catch(err){
+            console.log(err);
+            res.json(err);
+        }
+    },
 }
