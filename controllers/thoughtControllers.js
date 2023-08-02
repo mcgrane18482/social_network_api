@@ -68,7 +68,7 @@ module.exports = {
     // Update a thought
     async updateThought(req,res){
         try{
-            const thought = await Thought.findbyIdAndUpdate(
+            const thought = await Thought.findByIdAndUpdate(
                 req.params.thoughtId, 
                 {$set: req.body},
                 {runValidators:true, new: true});
@@ -107,7 +107,7 @@ module.exports = {
             if(!thought){
                 res.status(404).json({"message": "cannot delete - no thought found with that id"});
             }
-            res.json({"message": "Thought deleted successfully"});
+            res.json({"message": "Reaction deleted successfully"});
         }catch(err){
             console.log(err);
             res.json(err);
